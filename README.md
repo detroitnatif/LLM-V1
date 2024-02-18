@@ -1,7 +1,7 @@
-# MLP-V1
-This repository works through several iterations of a basic neural networks, starting with a basic gradient based learning algorithm without using any external libraries, to finally  a WaveNet model. 
+# LLM
+This repository works through several iterations of a basic neural networks, starting with a basic gradient based learning algorithm without using any external libraries, to finally a WaveNet transformer model.
 
-
+# Adapted from: https://github.com/author/repository/blob/master/file.py
 
 # MLP-V1
 
