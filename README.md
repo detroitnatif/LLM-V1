@@ -49,7 +49,7 @@ emma <br>
 emm ---> a <br>
 mma ---> . <br>
 
-# Writing API to create layer Instances - V4
+# Writing API to create layer Instances - V5
 [View code](https://github.com/detroitnatif/LLM-V1/blob/main/ActivationsGradientPytorch.ipynb)
 
 Moving on from hardcoding each layer and transformation, I create a Class which emulates those of PyTorch but with less functionality. Focusing on activating as many neurons as possible through batch normalization and tweaking hyper parameters. I also go through and prove each of the steps in back propogation [Here](https://github.com/detroitnatif/LLM-V1/blob/main/BackPropogationPytorch.ipynb)
