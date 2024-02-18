@@ -13,7 +13,7 @@ After calculating the gradients, by comparing the predicted values to the wanted
 
 ![Alt text](rBackPropgraph.png)
 
-# Predicting Names using Bigrams Probabilities - V2
+# Predicting names using Bigrams Probabilities - V2
 
 Using a file containing 32,000 names, I was looped through each name and kept a probability matrix of the letter and those which follow: Of the 228,146 bigrams, 'an' appeared 5438 times whereas 'qw' only twice. Below is the probability graph. 
 
@@ -21,6 +21,21 @@ Using a file containing 32,000 names, I was looped through each name and kept a 
 
 Converting these occurrances to probabilities, I am able to predict the next letter and create somewhat convincing names. The downside to this is it can only keep one letter of context in a 27 x 27 array (26 letters and a starter/terminator character), and this array would become exponentially large.
 
-# Predicting Names using basic neural net - V3 
+# Predicting names using basic neural net - V3 
+
+In this iteration, I introduced tensors to hold X (tensor containing all bigrams) and Y (tensor containing the letter which follows) and used One Hot Encodings to mulitply them into a rudimentary Linear layer, which I then was able to sample to create "Fake" names. Example output:
+
+rie.
+harimivo.
+janvi.
+briay.
+kalys.
+lmiah.
+rithtikeya.
+sirod.
+kyn.
+ho.
+bivemyr.
+
 
 
