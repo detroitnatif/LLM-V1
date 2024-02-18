@@ -1,7 +1,7 @@
 # LLM
 This repository works through several iterations of a basic neural networks, starting with a basic gradient based learning algorithm without using any external libraries, to finally a WaveNet transformer model. I decided to do this to understand larger models better at the lowest level, and to improve my explanatory skills to those who do not have a technical background.
 
-# Multi Layer Perceptron-V1
+# Multi Layer Perceptron - V1
 
 Rather than using PyTorch or library to create neural networks, I am building a rudimentary Neural Network here only using Addition, Subtraction, Multiplication, and Exponentiation. 
 
@@ -13,7 +13,7 @@ After calculating the gradients, by comparing the predicted values to the wanted
 
 ![Alt text](rBackPropgraph.png)
 
-# Predicting Names using Bigrams Probabilities
+# Predicting Names using Bigrams Probabilities - V2
 
 Using a file containing 32,000 names, I was looped through each name and kept a probability matrix of the letter and those which follow: Of the 228,146 bigrams, 'an' appeared 5438 times whereas 'qw' only twice. Below is the probability graph. 
 
