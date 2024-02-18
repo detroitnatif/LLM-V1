@@ -13,3 +13,9 @@ After calculating the gradients, by comparing the predicted values to the wanted
 
 ![Alt text](rBackPropgraph.png)
 
+# Predicting Names using Bigrams Probabilities
+
+Using a file containing 32,000 names, I was looped through each name and kept a probability matrix of the letter and those which follow: Of the 228,146 bigrams, 'an' appeared 5438 times whereas 'qw' only twice. Below is the probability graph. 
+
+![Alt text](BigramsCounted.png)
+
