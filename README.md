@@ -1,6 +1,6 @@
 # LLM
 This repository works through several iterations of a basic neural networks, starting with a basic gradient based learning algorithm without using any external libraries, to finally a WaveNet transformer model. I decided to do this to understand larger models better at the lowest level, and to improve my explanatory skills to those who do not have a technical background.
-
+----
 # Multi Layer Perceptron - V1
 [View code](https://github.com/detroitnatif/LLM-V1/blob/main/backPropogation.ipynb)
 
@@ -14,7 +14,7 @@ After creating a graph using the operands, I used a back propogation function to
 After calculating the gradients, by comparing the predicted values to the wanted outcomes, I calculated a loss function. I then iterively adjust the weights using the gradient to minimize this loss function, adjusting the parameters of the model to create a better loss. 
 
 <img src="BackPropgraph.png.png" alt="Description of the image" width="900" height="300">
-
+-----
 # Predicting names using Bigrams Probabilities - V2
 [View code](https://github.com/detroitnatif/LLM-V1/blob/main/Bigrams.ipynb)
 
@@ -23,7 +23,7 @@ Using a file containing 32,000 names, I was looped through each name and kept a 
 <img src="BigramsCounted.png" alt="Description of the image" width="500" height="500">
 
 Converting these occurrances to probabilities, I am able to predict the next letter and create somewhat convincing names. The downside to this is it can only keep one letter of context in a 27 x 27 array (26 letters and a starter/terminator character), and this array would become exponentially large.
-
+----
 # Predicting names using basic neural net - V3 
 [View code](https://github.com/detroitnatif/LLM-V1/blob/main/Bigrams.ipynb)
 
@@ -37,22 +37,22 @@ In this iteration, I introduced tensors to hold X (tensor containing all bigrams
 - sirod.
 - kyn.
 - ho.
-
+-----
 # Introducing Batch Normalization and Non Linearality Layers - V4
-[View code](https://github.com/detroitnatif/LLM-V1/blob/main/Bigrams.ipynb)
+[View code](https://github.com/detroitnatif/LLM-V1/blob/main/V3.ipynb)
 
 Still doing everything manually, I begin to use context here to better predict the coming letters. I impliment a 2 hidden layer linear transformation using batch sampling and normalization, as well as a non linearitly layer in the form of a tanh.
-emma
-... ---> e
-emma
-..e ---> m
-emma
-.em ---> m
-emma
-emm ---> a
-emma
-mma ---> .
-
+emma <br>
+... ---> e <br>
+emma <br>
+..e ---> m <br>
+emma <br>
+.em ---> m <br>
+emma <br>
+emm ---> a <br>
+emma <br>
+mma ---> . <br>
+---
 # Introducing Batch Normalization and Non Linearality Layers - V4
 
 
