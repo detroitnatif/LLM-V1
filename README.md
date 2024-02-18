@@ -44,13 +44,9 @@ In this iteration, I introduced tensors to hold X (tensor containing all bigrams
 Still doing everything manually, I begin to use context here to better predict the coming letters. I impliment a 2 hidden layer linear transformation using batch sampling and normalization, as well as a non linearitly layer in the form of a tanh.
 emma <br>
 ... ---> e <br>
-emma <br>
 ..e ---> m <br>
-emma <br>
 .em ---> m <br>
-emma <br>
 emm ---> a <br>
-emma <br>
 mma ---> . <br>
 
 # Introducing Batch Normalization and Non Linearality Layers - V4
