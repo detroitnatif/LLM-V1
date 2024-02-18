@@ -19,4 +19,8 @@ Using a file containing 32,000 names, I was looped through each name and kept a 
 
 <img src="BigramsCounted.png" alt="Description of the image" width="500" height="500">
 
+Converting these occurrances to probabilities, I am able to predict the next letter and create somewhat convincing names. The downside to this is it can only keep one letter of context in a 27 x 27 array (26 letters and a starter/terminator character), and this array would become exponentially large.
+
+# Predicting Names using basic neural net - V3 
+
 
