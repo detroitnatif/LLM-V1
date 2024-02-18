@@ -16,6 +16,7 @@ After calculating the gradients, by comparing the predicted values to the wanted
 <img src="BackPropgraph.png.png" alt="Description of the image" width="900" height="300">
 
 # Predicting names using Bigrams Probabilities - V2
+[View code](https://github.com/detroitnatif/LLM-V1/blob/main/Bigrams.ipynb)
 
 Using a file containing 32,000 names, I was looped through each name and kept a probability matrix of the letter and those which follow: Of the 228,146 bigrams, 'an' appeared 5438 times whereas 'qw' only twice. Below is the probability graph. 
 
@@ -24,6 +25,7 @@ Using a file containing 32,000 names, I was looped through each name and kept a 
 Converting these occurrances to probabilities, I am able to predict the next letter and create somewhat convincing names. The downside to this is it can only keep one letter of context in a 27 x 27 array (26 letters and a starter/terminator character), and this array would become exponentially large.
 
 # Predicting names using basic neural net - V3 
+[View code](https://github.com/detroitnatif/LLM-V1/blob/main/Bigrams.ipynb)
 
 In this iteration, I introduced tensors to hold X (tensor containing all bigrams) and Y (tensor containing the letter which follows) and used One Hot Encodings to mulitply them into a rudimentary Linear layer, which I then was able to sample to create "Fake" names. Example output from 500 forward passes, with a loss of 2.46 and no optimization of hyper-parameters. 
 
@@ -37,8 +39,19 @@ In this iteration, I introduced tensors to hold X (tensor containing all bigrams
 - ho.
 
 # Introducing Batch Normalization and Non Linearality Layers - V4
+[View code](https://github.com/detroitnatif/LLM-V1/blob/main/Bigrams.ipynb)
 
-Still doing everything manually, I impliment a 2 hidden layer linear transformation using batch sampling and normalization, as well as a non linearitly layer in the form of a tanh. 
+Still doing everything manually, I begin to use context here to better predict the coming letters. I impliment a 2 hidden layer linear transformation using batch sampling and normalization, as well as a non linearitly layer in the form of a tanh.
+emma
+... ---> e
+emma
+..e ---> m
+emma
+.em ---> m
+emma
+emm ---> a
+emma
+mma ---> .
 
 # Introducing Batch Normalization and Non Linearality Layers - V4
 
