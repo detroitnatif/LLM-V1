@@ -25,17 +25,15 @@ Converting these occurrances to probabilities, I am able to predict the next let
 
 In this iteration, I introduced tensors to hold X (tensor containing all bigrams) and Y (tensor containing the letter which follows) and used One Hot Encodings to mulitply them into a rudimentary Linear layer, which I then was able to sample to create "Fake" names. Example output:
 
-rie. \n
-harimivo. \n
-janvi.
-briay.
-kalys.
-lmiah.
-rithtikeya.
-sirod.
-kyn.
-ho.
-bivemyr.
+-rie. 
+-harimivo. 
+-janvi.
+-briay.
+-kalys.
+-sirod.
+-kyn.
+-ho.
+
 
 
 
