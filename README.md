@@ -41,7 +41,7 @@ In this iteration, I introduced tensors to hold X (tensor containing all bigrams
 # Introducing Batch Normalization and Non Linearality Layers - V4
 [View code](https://github.com/detroitnatif/LLM-V1/blob/main/V3.ipynb)
 
-Still doing everything manually, I begin to use context here to better predict the coming letters. I impliment a 2 hidden layer linear transformation using batch sampling and normalization, as well as a non linearitly layer in the form of a tanh.
+Still doing everything manually, I begin to use context here to better predict the coming letters. I impliment a 2 hidden layer linear transformation using batch sampling and normalization, as well as a non linearitly layer in the form of a tanh. <br>
 emma <br>
 ... ---> e <br>
 ..e ---> m <br>
@@ -49,7 +49,10 @@ emma <br>
 emm ---> a <br>
 mma ---> . <br>
 
-# Introducing Batch Normalization and Non Linearality Layers - V4
+# Writing API to create layer Instances - V4
+[View code](https://github.com/detroitnatif/LLM-V1/blob/main/ActivationsGradientPytorch.ipynb)
+
+Moving on from hardcoding each layer and transformation, I create a Class which emulates those of PyTorch but with less functionality. Focusing on activating as many neurons as possible through batch normalization and tweaking hyper parameters. I also go through and prove each of the steps in back propogation [Here](https://github.com/detroitnatif/LLM-V1/blob/main/BackPropogationPytorch.ipynb)
 
 
 
