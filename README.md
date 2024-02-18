@@ -17,5 +17,6 @@ After calculating the gradients, by comparing the predicted values to the wanted
 
 Using a file containing 32,000 names, I was looped through each name and kept a probability matrix of the letter and those which follow: Of the 228,146 bigrams, 'an' appeared 5438 times whereas 'qw' only twice. Below is the probability graph. 
 
-![Alt text](BigramsCounted.png)
+<img src="BigramsCounted.png" alt="Description of the image" width="300" height="200">
+
 
