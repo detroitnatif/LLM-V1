@@ -11,7 +11,7 @@ After creating a graph using the operands, I used a back propogation function to
 
 After calculating the gradients, by comparing the predicted values to the wanted outcomes, I calculated a loss function. I then iterively adjust the weights using the gradient to minimize this loss function, adjusting the parameters of the model to create a better loss. 
 
-![Alt text](rBackPropgraph.png)
+<img src="BackPropgraph.png.png" alt="Description of the image" width="500" height="200">
 
 # Predicting names using Bigrams Probabilities - V2
 
@@ -23,7 +23,7 @@ Converting these occurrances to probabilities, I am able to predict the next let
 
 # Predicting names using basic neural net - V3 
 
-In this iteration, I introduced tensors to hold X (tensor containing all bigrams) and Y (tensor containing the letter which follows) and used One Hot Encodings to mulitply them into a rudimentary Linear layer, which I then was able to sample to create "Fake" names. Example output:
+In this iteration, I introduced tensors to hold X (tensor containing all bigrams) and Y (tensor containing the letter which follows) and used One Hot Encodings to mulitply them into a rudimentary Linear layer, which I then was able to sample to create "Fake" names. Example output from 500 forward passes, with a loss of 2.46 and no optimization of hyper-parameters. 
 
 - rie. 
 - harimivo. 
@@ -34,6 +34,7 @@ In this iteration, I introduced tensors to hold X (tensor containing all bigrams
 - kyn.
 - ho.
 
+# Predicting names using basic neural net - V4
 
 
 
