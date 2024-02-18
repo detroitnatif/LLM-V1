@@ -1,14 +1,9 @@
 # LLM
-This repository works through several iterations of a basic neural networks, starting with a basic gradient based learning algorithm without using any external libraries, to finally a WaveNet transformer model.
-
-# Adapted from: https://github.com/author/repository/blob/master/file.py
+This repository works through several iterations of a basic neural networks, starting with a basic gradient based learning algorithm without using any external libraries, to finally a WaveNet transformer model. I decided to do this to understand larger models better at the lowest level, and to improve my explanatory skills to those who do not have a technical background.
 
 # MLP-V1
 
-Rather than using PyTorch or library to create neural networks, I am building a rudimentary Neural Network here only using Addition, Subtraction, Multiplication, and Exponentiation. I decided to do this to understand larger models better at the lowest level, and to improve my explanatory skills to those who do not have a technical background.
-
----
-
+Rather than using PyTorch or library to create neural networks, I am building a rudimentary Neural Network here only using Addition, Subtraction, Multiplication, and Exponentiation. 
 
 The first step is to create a Class which holds the data for each neuron as well as a tuple that will hold the Children neurons which created it, as well as the type of operand to get there. 
 
