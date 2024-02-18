@@ -11,5 +11,5 @@ After creating a graph using the operands, I used a back propogation function to
 
 After calculating the gradients, by comparing the predicted values to the wanted outcomes, I calculated a loss function. I then iterively adjust the weights using the gradient to minimize this loss function, adjusting the parameters of the model to create a better loss. 
 
-![Alt text](rBackPropgraph.png.png)
+![Alt text](LLM-V1/BackPropgraph.png.png)
 
