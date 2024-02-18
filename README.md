@@ -11,7 +11,7 @@ After creating a graph using the operands, I used a back propogation function to
 
 After calculating the gradients, by comparing the predicted values to the wanted outcomes, I calculated a loss function. I then iterively adjust the weights using the gradient to minimize this loss function, adjusting the parameters of the model to create a better loss. 
 
-<img src="BackPropgraph.png.png" alt="Description of the image" width="500" height="200">
+<img src="BackPropgraph.png.png" alt="Description of the image" width="900" height="300">
 
 # Predicting names using Bigrams Probabilities - V2
 
