@@ -2,6 +2,8 @@
 This repository works through several iterations of a basic neural networks, starting with a basic gradient based learning algorithm without using any external libraries, to finally a WaveNet transformer model. I decided to do this to understand larger models better at the lowest level, and to improve my explanatory skills to those who do not have a technical background.
 
 # Multi Layer Perceptron - V1
+[View code](https://github.com/detroitnatif/LLM-V1/backPropogation.ipynb)
+
 
 Rather than using PyTorch or library to create neural networks, I am building a rudimentary Neural Network here only using Addition, Subtraction, Multiplication, and Exponentiation. 
 
@@ -34,7 +36,11 @@ In this iteration, I introduced tensors to hold X (tensor containing all bigrams
 - kyn.
 - ho.
 
-# Predicting names using basic neural net - V4
+# Introducing Batch Normalization and Non Linearality Layers - V4
+
+Still doing everything manually, I impliment a 2 hidden layer linear transformation using batch sampling and normalization, as well as a non linearitly layer in the form of a tanh. 
+
+# Introducing Batch Normalization and Non Linearality Layers - V4
 
 
 
