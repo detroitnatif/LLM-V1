@@ -23,9 +23,13 @@ for b in range(B):     # LOOP THROUGH ALL THE BATCHES
 head_size = 16
 key = nn.Linear(C, head_size, bias=False)    
 query = nn.Linear(C, head_size, bias=False)
+value = nn.Linear(C, head_size, bias=False)
+
 k = key(x)    # x = (4, 8, 32) x (32, 16)  ==> 4, 8, 16
 q = query(x)  # x = (B,T,C)    x (C, 16)   ==> B, T, 16
 wei = q @ k.transpose(-2, -1)  # (B, T, 16) x (B, 16, T)  ==> B, T, T
+                               # (4, 8, 16) x (4, 16, 8) ==> (4, 8, 8)
+                               # This is a matrix which contains the affinity for each batch and its letters
         
 # wei = torch.tril(torch.ones(T,T))       # SAME THING DONE BELOW BUT IS LESS EXPENSIVE
 # wei = wei / wei.sum(1, keepdim=True)
@@ -35,9 +39,9 @@ tril = torch.tril(torch.ones(T,T))
 #  wei = torch.zeros((T,T))
 wei = wei.masked_fill(tril == 0, float('-inf'))
 wei = F.softmax(wei, dim=-1)
-print(wei[0].shape)
-out = wei @ x
-print(out[0].shape)
+v = value(x)
+out = wei @ v
+print(out.shape)
 # torch.manual_seed(42)                # SHOWING HOW TO USE TRIANGULAR MATRICES TO 
 # a = torch.tril(torch.ones(3,3))      # CREATE RUNNING AVERAGES WITHOUT LOOPS
 # a = a / torch.sum(a, 1, keepdim=True)
