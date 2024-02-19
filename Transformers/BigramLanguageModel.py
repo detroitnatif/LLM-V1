@@ -1,54 +1,21 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[29]:
-
-
 import os
 os.environ['PATH'] += ':/opt/local/bin'
 import torch
-
-
-# In[9]:
 import subprocess
+import torch.nn as nn
+from torch.nn import functional as F
+torch.manual_seed(1337)
+g = torch.Generator()
+g.manual_seed(1337)
 
-# Run wget command to download a file
+
 subprocess.run(['wget', 'https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt'])
-
-
-
-# get_ipython().system('wget https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt')
-
-
-# In[10]:
-
 
 with open('input.txt', 'r', encoding='utf-8') as f:
     text = f.read()
 
-
-# In[12]:
-
-
-# print("Characters in Dataset")
-# print(len(text))
-
-
-# In[13]:
-
-
-# print(text[:500])
-
-
-# In[18]:
-
-
 chars = sorted(list(set(text)))
 vocab_size = len(chars)
-# print(''.join(chars), len(chars))
-
-
-# In[28]:
 
 
 s2i = {i:s for s, i in enumerate(chars)}
@@ -56,98 +23,51 @@ i2s = {s:i for s, i in enumerate(chars)}
 encode = lambda s: [s2i[c] for c in s]
 decode = lambda l: ''.join([i2s[i] for i in l])
 
-a = encode("hiii there!")
-# print(a)
-# print(decode(a))
-
-
-# In[33]:
-
 
 data = torch.tensor(encode(text), dtype=torch.long)
-print(data.shape, data.dtype)
-print(data[:5])
-
-
-# In[34]:
-
 
 n = int(.9*len(data))
 train_data = data[:n]
 val_data = data[n:]
 
 
-# In[37]:
-
-
-block_size = 8
-train_data[:block_size + 1]
-
-
-# In[36]:
-
-
-x = train_data[:block_size]
-y = train_data[1:block_size+1]
-for t in range(block_size):  # WHEN YOU INDEX INTO THE FIRST ELEMENT
-    context = x[:t+1]        # ITS train_data[:1] not train_data[0]
-    target = y[t]
-    print(f'when input is {context}, target is {target}')
-
-
-# In[ ]:
-
-
-
-
-
-# In[106]:
-
-
 torch.manual_seed(1337)
-batch_size = 4
+batch_size = 32
 block_size = 8
+max_iters = 1000
+eval_interval = 200
+learning_rate = 1e-2
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+eval_iters = 200
+
+
 
 def get_batch(split):
     data = train_data if split == "test_data" else val_data
     ix = torch.randint(len(data) - block_size, (batch_size,)) # 0 to len of data - block size
     x = torch.stack([data[i:i+block_size] for i in ix])
     y = torch.stack([data[i+1:i+block_size+1] for i in ix])
-    
-#     print('ix')
-#     print(ix)
-#     print("4 random numbers from len(data)\n")
-    
-#     print('x')
-#     print("Index into 8 consectutive numbers")
-#     print(x)
-    
-#     print('y')
-#     print("Index into 8 consectutive numbers offset by 1\n")
-#     print(y)
-    
-    
+
     return x, y
 
 xb, yb = get_batch('train')
 
-# print("inputs")
-# print(xb.shape)
-# print(xb)
+@torch.no_grad()
+def estimate_loss():
+    out = {}
+    model.eval()
+    for split in ['train', 'val']:
+        losses = torch.zeros(eval_iters)
+        for k in range(eval_iters):
+            X, Y = get_batch(split)
+            logits, loss = model(X, Y)
+            losses[k] = loss.item()
+        out[split] = losses.mean()
+    model.train()
+    return out
 
-# print("targets")
-# print(yb.shape)
-# print(yb)
 
 
-# In[107]:
-
-
-import torch.nn as nn
-from torch.nn import functional as F
-torch.manual_seed(1337)
-g = torch.Generator()
-g.manual_seed(1337)
 
 class BigramLanguageModel(nn.Module):
     
@@ -183,42 +103,27 @@ class BigramLanguageModel(nn.Module):
             
         return idx
     
-
-
-# In[102]:
-
-
-m = BigramLanguageModel(vocab_size)
-logits, loss = m(xb, yb) # Taking 4 samples of 8 context and making 65 dimensions of embedding
-print(loss)  # WITHOUT TRAINING THE LOSS SHOULD BE "Negative Log Liklihood" => log {-(1/65)}
+model = BigramLanguageModel(vocab_size)
+logits, loss = model(xb, yb) # Taking 4 samples of 8 context and making 65 dimensions of embedding
+# print(loss)  # WITHOUT TRAINING THE LOSS SHOULD BE "Negative Log Liklihood" => log {-(1/65)}
 
 idx = torch.zeros((1, 1), dtype=torch.long)
 
-n = m.generate(idx, 25)[0].tolist()
-print(decode(n))
+n = model.generate(idx, 25)[0].tolist()
 
 
-# In[108]:
-
-
-# Create a PyTorch Optimizer
-optimizer = torch.optim.AdamW(m.parameters(), lr=1e-3)
-
-
-# In[114]:
-
-
+optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3)
 batch = 32 
 for steps in range(100):
     xb, yb = get_batch('train')
-    logits, loss = m(xb, yb)
+    logits, loss = model(xb, yb)
     optimizer.zero_grad(set_to_none=True)
     loss.backward()
     optimizer.step()
     
 print(loss.item())
 
-n = m.generate(idx, 100)[0].tolist()
+n = model.generate(idx, 100)[0].tolist()
 print(decode(n))
     
 
