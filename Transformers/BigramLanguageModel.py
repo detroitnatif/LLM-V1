@@ -30,7 +30,7 @@ n = int(.9*len(data))
 train_data = data[:n]
 val_data = data[n:]
 
-
+# HYPER PARAMETERS
 torch.manual_seed(1337)
 batch_size = 32
 block_size = 8
@@ -39,7 +39,7 @@ eval_interval = 200
 learning_rate = 1e-2
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 eval_iters = 200
-
+n_embd = 32
 
 
 def get_batch(split):
@@ -71,13 +71,20 @@ def estimate_loss():
 
 class BigramLanguageModel(nn.Module):
     
-    def __init__(self, vocab_size):
+    def __init__(self):
         super().__init__()
-        self.token_embedding_table = nn.Embedding(vocab_size, vocab_size)
+        self.token_embedding_table = nn.Embedding(vocab_size, n_embd)
+        self.position_embedding_table = nn.Embedding(block_size, n_embd)
+        self.lm_head = nn.Linear(n_embd, vocab_size)
         
     def forward(self, idx, targets=None):
-        logits = self.token_embedding_table(idx) # CREATES B,T,C array which is Batch(4) x Time(8) x Channel(65)
-        B, T, C = logits.shape
+
+        B, T = idx.shape
+        tok_emb = self.token_embedding_table(idx) # CREATES B,T,C array which is Batch(4) x Time(8) x Channel(65)
+        pos_emb = self.position_embedding_table(torch.arange(T, device=device))
+        x = tok_emb + pos_emb
+        logits = self.lm_head(x)
+
         
         if targets is None:
             loss = None
@@ -103,7 +110,7 @@ class BigramLanguageModel(nn.Module):
             
         return idx
     
-model = BigramLanguageModel(vocab_size)
+model = BigramLanguageModel()
 logits, loss = model(xb, yb) # Taking 4 samples of 8 context and making 65 dimensions of embedding
 # print(loss)  # WITHOUT TRAINING THE LOSS SHOULD BE "Negative Log Liklihood" => log {-(1/65)}
 
