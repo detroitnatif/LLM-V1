@@ -50,7 +50,7 @@ def get_batch(split):
 
     return x, y
 
-# xb, yb = get_batch('train')
+xb, yb = get_batch('train')
 
 @torch.no_grad()
 def estimate_loss():
@@ -68,34 +68,6 @@ def estimate_loss():
 
 
 head_size = 16
-
-
-class Block(nn.Module):
-    
-    
-    def __init__(self, n_embd, n_head):
-        super().__init__()
-        head_size = n_embd // n_head
-        self.sa = Multipleheadattention(n_head, head_size)
-        self.ffwd = FeedForward(n_embd)
-
-    def forward(self, x):
-        x = self.sa(x)
-        x = self.ffwd(x)
-        return x
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 class Head(nn.Module):
@@ -137,7 +109,24 @@ class FeedForward(nn.Module):
             nn.ReLU(),
         )
     def forward(self, x):
-        return self.next(x)
+        return self(x)
+    
+
+class Block(nn.Module):
+    
+    
+    def __init__(self, n_embd, n_head):
+        super().__init__()
+        head_size = n_embd // n_head
+        self.sa = Multipleheadattention(n_head, head_size)
+        self.ffwd = FeedForward(n_embd)
+        self.ln1 = nn.LayerNorm(n_embd)
+        self.ln2 = nn.LayerNorm(n_embd)
+    def forward(self, x):
+        x = x + self.sa(self.ln1(x))
+        x = x + self.ffwd(self.ln2(x))
+        return x
+
     
 class BigramLanguageModel(nn.Module):
     
@@ -145,9 +134,13 @@ class BigramLanguageModel(nn.Module):
         super().__init__()
         self.token_embedding_table = nn.Embedding(vocab_size, n_embd)
         self.position_embedding_table = nn.Embedding(block_size, n_embd)
-        self.feed = FeedForward(n_embd)
+        self.blocks = nn.Sequential(
+            Block(n_embd, n_head=4),
+            Block(n_embd, n_head=4),
+            Block(n_embd, n_head=4),
+            nn.LayerNorm(n_embd),
+        )
         self.lm_head = nn.Linear(n_embd, vocab_size)
-        self.sa_heads = Multipleheadattention(4, n_embd//4)
         
     def forward(self, idx, targets=None):
 
@@ -191,7 +184,7 @@ logits, loss = model(xb, yb) # Taking 4 samples of 8 context and making 65 dimen
 
 idx = torch.zeros((1, 1), dtype=torch.long)
 
-n = model.generate(idx, 25)[0].tolist()
+# n = model.generate(idx, 25)[0].tolist()
 
 
 optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3)
