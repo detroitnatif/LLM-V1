@@ -50,24 +50,54 @@ def get_batch(split):
 
     return x, y
 
-xb, yb = get_batch('train')
+# xb, yb = get_batch('train')
 
 @torch.no_grad()
 def estimate_loss():
     out = {}
-    model.eval()
-    for split in ['train', 'val']:
-        losses = torch.zeros(eval_iters)
-        for k in range(eval_iters):
-            X, Y = get_batch(split)
-            logits, loss = model(X, Y)
-            losses[k] = loss.item()
-        out[split] = losses.mean()
-    model.train()
+    model.eval()                         # SWITCH TO EVAL STAGE
+    for split in ['train', 'val']:       # CHOOSE TRAIN OR VAL
+        losses = torch.zeros(eval_iters) # ZEROS ARRAY TO KEEP VALS IN
+        for k in range(eval_iters):      # LOOP FOR EACH INDEX
+            Xb, Yb = get_batch(split)    # GET BATCHS
+            logits, loss = model(Xb, Yb) # PREDICT LOSS
+            losses[k] = loss.item()      # PLACE INTO ARRAY
+        out[split] = losses.mean()       # MAKE DICT OF MEAN OF LOSS FOR TRAIN/VAL
+    model.train()                        #  # SWITCH TO TRAIN STAGE
     return out
 
 
 head_size = 16
+
+
+class Block(nn.Module):
+    
+    
+    def __init__(self, n_embd, n_head):
+        super().__init__()
+        head_size = n_embd // n_head
+        self.sa = Multipleheadattention(n_head, head_size)
+        self.ffwd = FeedForward(n_embd)
+
+    def forward(self, x):
+        x = self.sa(x)
+        x = self.ffwd(x)
+        return x
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class Head(nn.Module):
 
     def __init__(self, head_size):
