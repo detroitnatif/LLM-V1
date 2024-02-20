@@ -104,12 +104,13 @@ class FeedForward(nn.Module):
 
     def __init__(self, n_embd):
         super().__init__()
-        self.net = nn.Sequential(
+        self.feed = nn.Sequential(
             nn.Linear(n_embd, n_embd),
             nn.ReLU(),
         )
     def forward(self, x):
-        return self(x)
+        out = self.feed(x)
+        return out
     
 
 class Block(nn.Module):
@@ -148,8 +149,8 @@ class BigramLanguageModel(nn.Module):
         tok_emb = self.token_embedding_table(idx) # CREATES B,T,C array which is Batch(4) x Time(8) x Channel(65)
         pos_emb = self.position_embedding_table(torch.arange(T, device=device))
         x = tok_emb + pos_emb
-        x = self.sa_heads(x)
-        x = self.feed(x)
+        x = self.blocks(x)
+        # x = self.feed(x)
         logits = self.lm_head(x)
 
         
@@ -189,7 +190,7 @@ idx = torch.zeros((1, 1), dtype=torch.long)
 
 optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3)
 batch = 32 
-for steps in range(50):
+for steps in range(5000):
     xb, yb = get_batch('train')
     logits, loss = model(xb, yb)
     optimizer.zero_grad(set_to_none=True)
