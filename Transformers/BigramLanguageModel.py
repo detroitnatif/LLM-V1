@@ -96,14 +96,26 @@ class Multipleheadattention(nn.Module):
 
     def forward(self, x):
         return torch.cat([h(x) for h in self.heads], dim=-1)
+    
 
+class FeedForward(nn.Module):
 
+    def __init__(self, n_embd):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(n_embd, n_embd),
+            nn.ReLU(),
+        )
+    def forward(self, x):
+        return self.next(x)
+    
 class BigramLanguageModel(nn.Module):
     
     def __init__(self):
         super().__init__()
         self.token_embedding_table = nn.Embedding(vocab_size, n_embd)
         self.position_embedding_table = nn.Embedding(block_size, n_embd)
+        self.feed = FeedForward(n_embd)
         self.lm_head = nn.Linear(n_embd, vocab_size)
         self.sa_heads = Multipleheadattention(4, n_embd//4)
         
@@ -113,7 +125,8 @@ class BigramLanguageModel(nn.Module):
         tok_emb = self.token_embedding_table(idx) # CREATES B,T,C array which is Batch(4) x Time(8) x Channel(65)
         pos_emb = self.position_embedding_table(torch.arange(T, device=device))
         x = tok_emb + pos_emb
-        x = self.sa_head(x)
+        x = self.sa_heads(x)
+        x = self.feed(x)
         logits = self.lm_head(x)
 
         
@@ -137,7 +150,7 @@ class BigramLanguageModel(nn.Module):
 #             print(logits.shape)
             probs = F.softmax(logits, dim=-1)
             idx_next = torch.multinomial(probs, num_samples=1)
-            idx = torch.cat((idx_cond, idx_next), dim=1)
+            idx = torch.cat((idx, idx_next), dim=1)
 
             
         return idx
