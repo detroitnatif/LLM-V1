@@ -4,9 +4,9 @@ import torch
 import subprocess
 import torch.nn as nn
 from torch.nn import functional as F
-torch.manual_seed(1337)
-g = torch.Generator()
-g.manual_seed(1337)
+# torch.manual_seed(1337)
+# g = torch.Generator()
+# g.manual_seed(1337)
 
 
 # subprocess.run(['wget', 'https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt'])
@@ -34,9 +34,9 @@ val_data = data[n:]
 torch.manual_seed(1337)
 batch_size = 32
 block_size = 8
-max_iters = 1000
+max_iters = 5000
 eval_interval = 200
-learning_rate = 1e-2
+learning_rate = 1e-3
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 eval_iters = 200
 n_embd = 32
@@ -89,6 +89,14 @@ class Head(nn.Module):
         out = wei @ v
         return out
 
+class Multipleheadattention(nn.Module):
+    def __init__(self, num_heads, head_size):
+        super().__init__()
+        self.heads = nn.ModuleList([Head(head_size) for _ in range(num_heads)])
+
+    def forward(self, x):
+        return torch.cat([h(x) for h in self.heads], dim=-1)
+
 
 class BigramLanguageModel(nn.Module):
     
@@ -97,6 +105,7 @@ class BigramLanguageModel(nn.Module):
         self.token_embedding_table = nn.Embedding(vocab_size, n_embd)
         self.position_embedding_table = nn.Embedding(block_size, n_embd)
         self.lm_head = nn.Linear(n_embd, vocab_size)
+        self.sa_heads = Multipleheadattention(4, n_embd//4)
         
     def forward(self, idx, targets=None):
 
@@ -104,6 +113,7 @@ class BigramLanguageModel(nn.Module):
         tok_emb = self.token_embedding_table(idx) # CREATES B,T,C array which is Batch(4) x Time(8) x Channel(65)
         pos_emb = self.position_embedding_table(torch.arange(T, device=device))
         x = tok_emb + pos_emb
+        x = self.sa_head(x)
         logits = self.lm_head(x)
 
         
@@ -120,13 +130,14 @@ class BigramLanguageModel(nn.Module):
     def generate(self, idx, max_new_tokens):
         # Idx is (B,T) array of indices in the current context
         for _ in range(max_new_tokens):
-            logits, loss = self(idx)
+            idx_cond = idx[:, -block_size:]
+            logits, loss = self(idx_cond)
 #             print(logits.shape)
             logits = logits[:, -1, :] # this slices the entire 1st and 3rd rows but only the last element of the 2nd
 #             print(logits.shape)
             probs = F.softmax(logits, dim=-1)
-            idx_next = torch.multinomial(probs, num_samples=1, generator=g )
-            idx = torch.cat((idx, idx_next), dim=1)
+            idx_next = torch.multinomial(probs, num_samples=1)
+            idx = torch.cat((idx_cond, idx_next), dim=1)
 
             
         return idx
@@ -142,7 +153,7 @@ n = model.generate(idx, 25)[0].tolist()
 
 optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3)
 batch = 32 
-for steps in range(100):
+for steps in range(50):
     xb, yb = get_batch('train')
     logits, loss = model(xb, yb)
     optimizer.zero_grad(set_to_none=True)
@@ -151,7 +162,6 @@ for steps in range(100):
     
 print(loss.item())
 
-n = model.generate(idx, 100)[0].tolist()
+n = model.generate(idx, 500)[0].tolist()
 print(decode(n))
-    
 
