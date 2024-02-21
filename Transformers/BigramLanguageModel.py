@@ -33,7 +33,7 @@ val_data = data[n:]
 # HYPER PARAMETERS
 torch.manual_seed(1337)
 batch_size = 32
-block_size = 8
+block_size = 32
 max_iters = 5000
 eval_interval = 200
 learning_rate = 1e-3
@@ -195,15 +195,16 @@ idx = torch.zeros((1, 1), dtype=torch.long)
 
 optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3)
 batch = 32 
+
+
 for steps in range(50):
     xb, yb = get_batch('train')
     logits, loss = model(xb, yb)
     optimizer.zero_grad(set_to_none=True)
     loss.backward()
     optimizer.step()
-    
-print(loss.item())
 
 n = model.generate(idx, 500)[0].tolist()
+
 print(decode(n))
 
